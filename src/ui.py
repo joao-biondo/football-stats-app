@@ -158,3 +158,17 @@ def goals_vs_assists_per_player(player_a: Player, player_b: Player = None) -> go
     )
 
     return fig
+
+
+def most_goals_and_assists(state: AppState) -> dict:
+    df = pd.DataFrame([p.to_dict() for p in state.jogadores])
+    goals = df.iloc[:, 1]
+    assists = df.iloc[:, 2]
+    involvement = df.iloc[:, 3]
+    labels = ["Artilheiro", "Mais Asistências", "Mais Participações"]
+    metrics = dict()
+    for series, label in zip([goals, assists, involvement], labels):
+        idx = series.idxmax()
+        player = df.iloc[:, 0][idx]
+        metrics[f"{label}"] = {f"{player}": series[idx]}
+    return metrics

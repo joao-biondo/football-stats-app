@@ -8,6 +8,7 @@ from src.ui import (
     goals_bar_chart,
     goals_vs_assists_scatter,
     goals_vs_assists_per_player,
+    most_goals_and_assists,
 )
 
 st.set_page_config(
@@ -30,7 +31,21 @@ with tab1:
     st.subheader("Tabela Geral")
     df_geral = pd.DataFrame([p.to_dict() for p in state.jogadores])
     st.dataframe(df_geral, width="stretch", hide_index=True)
-
+    metrics = most_goals_and_assists(state)
+    for idx, col in enumerate(st.columns(3)):
+        with col:
+            label = list(metrics.keys())[idx]
+            for k, v in metrics[label].items():
+                player = k
+                value = v
+            st.metric(
+                label,
+                value,
+                player,
+                delta_color="yellow",
+                delta_arrow="off",
+                border=True,
+            )
     st.plotly_chart(goals_bar_chart(state), width="stretch")
     st.plotly_chart(goals_vs_assists_scatter(state), width="stretch")
 
