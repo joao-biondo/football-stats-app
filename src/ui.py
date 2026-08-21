@@ -62,6 +62,7 @@ def radar_figure(player_a: Player, player_b: Player = None) -> go.Figure:
             fill="toself",
             name=player_a.nome,
             line=dict(color=player_a.cor_tema, width=3),
+            hovertemplate="<b>%{theta}</b>: %{r}<extra></extra>",
         )
     )
 
@@ -73,6 +74,7 @@ def radar_figure(player_a: Player, player_b: Player = None) -> go.Figure:
                 fill="toself",
                 name=player_b.nome,
                 line=dict(color="#f7c948", width=3),
+                hovertemplate="<b>%{theta}</b>: %{r}<extra></extra>",
             )
         )
 
