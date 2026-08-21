@@ -31,6 +31,9 @@ with tab1:
     st.subheader("Tabela Geral")
     df_geral = pd.DataFrame([p.to_dict() for p in state.jogadores])
     st.dataframe(df_geral, width="stretch", hide_index=True)
+    if st.button("🔄 Atualizar Dados"):
+        st.cache_data.clear()
+        st.rerun()
     metrics = most_goals_and_assists(state)
     for idx, col in enumerate(st.columns(3)):
         with col:
