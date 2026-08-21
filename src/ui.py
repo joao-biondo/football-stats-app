@@ -49,10 +49,10 @@ def render_info_card(label: str, value: str) -> None:
 
 
 def radar_figure(player_a: Player, player_b: Player = None) -> go.Figure:
-    labels = ["Partidas", "Vitórias", "Gols", "Assistências", "Participações"]
+    labels = ["Gols", "Assistências", "Participações"]
 
     def get_values(p: Player):
-        return [p.partidas, p.vitorias, p.gols, p.assistencias, p.participacoes_gols]
+        return [p.gols, p.assistencias, p.participacoes_gols]
 
     fig = go.Figure()
     fig.add_trace(

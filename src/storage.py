@@ -30,10 +30,6 @@ def load_state() -> AppState:
 
             jogador = Player(
                 nome=nome,
-                partidas=int(row.get("Matches", 0) or 0),
-                vitorias=int(row.get("Wins", 0) or 0),
-                empates=int(row.get("Draw", 0) or 0),
-                derrotas=int(row.get("Losses", 0) or 0),
                 gols=int(row.get("Goals", 0) or 0),
                 assistencias=int(row.get("Assists", 0) or 0),
                 foto_url=str(row.get("Foto", "")).strip(),

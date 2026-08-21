@@ -32,15 +32,13 @@ with tab2:
     jogador = next((p for p in state.jogadores if p.nome == selecionado), None)
 
     if jogador:
-        cols = st.columns(4)
+        cols = st.columns(3)
         with cols[0]:
-            render_info_card("Partidas", str(jogador.partidas))
-        with cols[1]:
             render_info_card("Gols", str(jogador.gols))
-        with cols[2]:
+        with cols[1]:
             render_info_card("Assistências", str(jogador.assistencias))
-        with cols[3]:
-            render_info_card("Aproveitamento", f"{jogador.aproveitamento:.1f}%")
+        with cols[2]:
+            render_info_card("Participações em gols", str(jogador.participacoes_gols))
 
         st.plotly_chart(radar_figure(jogador), use_container_width=True)
 
