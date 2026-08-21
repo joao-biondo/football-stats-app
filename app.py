@@ -29,10 +29,10 @@ tab1, tab2, tab3 = st.tabs(["🏠 Geral", "👤 Perfil do Jogador", "⚔️ Comp
 with tab1:
     st.subheader("Tabela Geral")
     df_geral = pd.DataFrame([p.to_dict() for p in state.jogadores])
-    st.dataframe(df_geral, use_container_width=True, hide_index=True)
+    st.dataframe(df_geral, width="stretch", hide_index=True)
 
-    st.plotly_chart(goals_bar_chart(state), use_container_width=True)
-    st.plotly_chart(goals_vs_assists_scatter(state), use_container_width=True)
+    st.plotly_chart(goals_bar_chart(state), width="stretch")
+    st.plotly_chart(goals_vs_assists_scatter(state), width="stretch")
 
 with tab2:
     nomes = [p.nome for p in state.jogadores]
@@ -48,7 +48,7 @@ with tab2:
         with cols[2]:
             render_info_card("Participações em gols", str(jogador.participacoes_gols))
 
-        st.plotly_chart(radar_figure(jogador), use_container_width=True)
+        st.plotly_chart(radar_figure(jogador), width="stretch")
 
 with tab3:
     col1, col2 = st.columns(2)
@@ -63,5 +63,5 @@ with tab3:
     j2 = next((p for p in state.jogadores if p.nome == j2_nome), None)
 
     if j1 and j2:
-        st.plotly_chart(radar_figure(j1, j2), use_container_width=True)
-        st.plotly_chart(goals_vs_assists_per_player(j1, j2), use_container_width=True)
+        st.plotly_chart(radar_figure(j1, j2), width="stretch")
+        st.plotly_chart(goals_vs_assists_per_player(j1, j2), width="stretch")
