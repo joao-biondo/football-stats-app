@@ -1,7 +1,14 @@
 import streamlit as st
 import pandas as pd
 from src.storage import load_state
-from src.ui import inject_styles, render_info_card, radar_figure, goals_bar_chart
+from src.ui import (
+    inject_styles,
+    render_info_card,
+    radar_figure,
+    goals_bar_chart,
+    goals_vs_assists_scatter,
+    goals_vs_assists_per_player,
+)
 
 st.set_page_config(
     page_title="Extensão FEF Futebol 2s2026", page_icon="⚽", layout="wide"
@@ -25,6 +32,7 @@ with tab1:
     st.dataframe(df_geral, use_container_width=True, hide_index=True)
 
     st.plotly_chart(goals_bar_chart(state), use_container_width=True)
+    st.plotly_chart(goals_vs_assists_scatter(state), use_container_width=True)
 
 with tab2:
     nomes = [p.nome for p in state.jogadores]
@@ -56,3 +64,4 @@ with tab3:
 
     if j1 and j2:
         st.plotly_chart(radar_figure(j1, j2), use_container_width=True)
+        st.plotly_chart(goals_vs_assists_per_player(j1, j2), use_container_width=True)

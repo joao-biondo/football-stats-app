@@ -111,3 +111,50 @@ def goals_bar_chart(state: AppState) -> go.Figure:
         legend_title="Métrica",
     )
     return fig
+
+
+def goals_vs_assists_scatter(state: AppState) -> go.Figure:
+    df = pd.DataFrame([p.to_dict() for p in state.jogadores])
+    if df.empty:
+        return go.Figure()
+
+    fig = px.scatter(
+        df,
+        x="Assistências",
+        y="Gols",
+        size="Participações",
+        color="Jogador",
+        hover_name="Jogador",
+        size_max=40,
+    )
+
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(color="white"),
+        xaxis_title="Assistências",
+        yaxis_title="Gols",
+        showlegend=True,
+    )
+    # Add subtle grid lines for readability
+    fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor="rgba(255,255,255,0.1)")
+    fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor="rgba(255,255,255,0.1)")
+
+    return fig
+
+
+def goals_vs_assists_per_player(player_a: Player, player_b: Player = None) -> go.Figure:
+    if not all([player_a, player_b]):
+        return go.Figure()
+    df = pd.DataFrame([player_a.to_dict(), player_b.to_dict()])
+    fig = px.scatter(
+        df,
+        x="Assistências",
+        y="Gols",
+        size="Participações",
+        color="Jogador",
+        hover_name="Jogador",
+        size_max=40,
+    )
+
+    return fig
