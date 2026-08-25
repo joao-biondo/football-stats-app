@@ -18,6 +18,7 @@ def load_state() -> AppState:
     try:
         conn = _get_gsheets_connection()
         df = conn.read()
+        df = df.replace(float("NaN"), 0)
 
         if df is None or df.empty:
             return AppState()
