@@ -33,6 +33,7 @@ def load_state() -> AppState:
                 nome=nome,
                 gols=int(row.get("Goals", 0) or 0),
                 assistencias=int(row.get("Assists", 0) or 0),
+                melhor_da_partida=int(row.get("Man of the Match", 0) or 0),
                 foto_url=str(row.get("Foto", "")).strip(),
             )
             jogadores.append(jogador)
