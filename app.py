@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from src.storage import load_state
+from src.storage import load_state, register_vote
 from src.ui import (
     inject_styles,
     render_info_card,
@@ -9,6 +9,7 @@ from src.ui import (
     goals_vs_assists_scatter,
     goals_vs_assists_per_player,
     most_goals_and_assists,
+    player_card,
 )
 
 st.set_page_config(
@@ -25,7 +26,9 @@ if not state.jogadores:
     st.warning("Nenhum dado encontrado. Verifique a conexão com a planilha.")
     st.stop()
 
-tab1, tab2, tab3 = st.tabs(["🏠 Geral", "👤 Perfil do Jogador", "⚔️ Comparação"])
+tab1, tab2, tab3, tab4 = st.tabs(
+    ["🏠 Geral", "👤 Perfil do Jogador", "⚔️ Comparação", "⭐ Vote no melhor da semana"]
+)
 
 with tab1:
     st.subheader("Tabela Geral")
@@ -83,3 +86,21 @@ with tab3:
     if j1 and j2:
         st.plotly_chart(radar_figure(j1, j2), width="stretch")
         st.plotly_chart(goals_vs_assists_per_player(j1, j2), width="stretch")
+
+with tab4:
+    st.subheader("Melhor da semana")
+
+    nomes = [player.nome for player in state.jogadores]
+    _, col, _ = st.columns(3)
+    with col:
+        jogador = st.selectbox("Craque:", nomes)
+        player_obj = next((p for p in state.jogadores if p.nome == jogador), None)
+        if player_obj:
+            player_card(player_obj)
+        if st.button("Votar", width="stretch", type="primary"):
+            res = register_vote(jogador)
+            message = res.message
+            if res.success:
+                st.success(message)
+            else:
+                st.warning(message)

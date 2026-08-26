@@ -30,6 +30,95 @@ def inject_styles() -> None:
         }
         .stat-card .label { color: var(--muted); font-size: 0.85rem; text-transform: uppercase; }
         .stat-card .value { color: white; font-size: 1.8rem; font-weight: bold; margin-top: 0.5rem; }
+        .player-fut-card {
+            background: linear-gradient(135deg, rgba(10, 48, 34, 0.9) 0%, rgba(4, 30, 21, 0.95) 100%);
+            border: 2px solid #f7c948;
+            border-radius: 20px;
+            padding: 1.2rem;
+            max-width: 340px;
+            margin: 0.5rem auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(247, 201, 72, 0.15);
+            transition: transform 0.2s ease;
+        }
+
+        .player-fut-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.8rem;
+        }
+
+        .photo-wrapper img {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #f7c948;
+            background-color: #062319;
+        }
+
+        .player-title h3 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-winrate {
+            display: inline-block;
+            background: rgba(247, 201, 72, 0.15);
+            color: #f7c948;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-top: 4px;
+            border: 1px solid rgba(247, 201, 72, 0.3);
+        }
+
+        .card-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .stat-box.highlight {
+            grid-column: span 2;
+            background: linear-gradient(90deg, rgba(247, 201, 72, 0.1), rgba(81, 207, 102, 0.1));
+            border: 1px solid rgba(247, 201, 72, 0.3);
+        }
+
+        .stat-value {
+            display: block;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            display: block;
+            color: rgba(240, 253, 244, 0.6);
+            font-size: 0.65rem;
+            font-weight: 700;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -172,3 +261,40 @@ def most_goals_and_assists(state: AppState) -> dict:
         player = df.iloc[:, 0][idx]
         metrics[f"{label}"] = {f"{player}": series[idx]}
     return metrics
+
+
+def player_card(player: Player):
+    if not isinstance(player, Player):
+        raise TypeError("'player' argument must be an instance of `Player` class.")
+
+    card_html = f"""
+    <div class="player-fut-card">
+        <div class="card-header">
+            <div class="photo-wrapper">
+                <img src="{player.foto_url}" alt="{player.nome}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/166/166344.png'"/>
+            </div>
+            <div class="player-title">
+                <h3>{player.nome}</h3>
+            </div>
+        </div>
+        <div class="card-stats-grid">
+            <div class="stat-box">
+                <span class="stat-value">{player.gols}</span>
+                <span class="stat-label">GOLS</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-value">{player.assistencias}</span>
+                <span class="stat-label">ASSISTÊNCIAS</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-value">{player.participacoes_gols}</span>
+                <span class="stat-label">PARTICIPAÇÕES</span>
+            </div>
+            <div class="stat-box highlight">
+                <span class="stat-value">⭐ {player.melhor_da_partida}</span>
+                <span class="stat-label">CRAQUE</span>
+            </div>
+        </div>
+    </div>
+    """
+    st.markdown(card_html, unsafe_allow_html=True)
