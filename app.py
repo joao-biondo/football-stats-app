@@ -1,9 +1,11 @@
 import streamlit as st
 import pandas as pd
+import time
 from src.storage import load_state, register_vote
 from src.ui import (
     inject_styles,
     render_info_card,
+    refresh_app_data,
     radar_figure,
     goals_bar_chart,
     goals_vs_assists_scatter,
@@ -35,8 +37,7 @@ with tab1:
     df_geral = pd.DataFrame([p.to_dict() for p in state.jogadores])
     st.dataframe(df_geral.iloc[:, :-1], width="stretch", hide_index=True)
     if st.button("🔄 Atualizar Dados"):
-        st.cache_data.clear()
-        st.rerun()
+        refresh_app_data()
     metrics = most_goals_and_assists(state)
     for idx, col in enumerate(st.columns(3)):
         with col:
@@ -104,6 +105,8 @@ with tab4:
             message = res.message
             if res.success:
                 st.success(message)
+                time.sleep(2)
+                refresh_app_data()
             else:
                 st.warning(message)
     with col2:

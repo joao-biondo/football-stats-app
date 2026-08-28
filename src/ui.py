@@ -207,6 +207,11 @@ def random_avatar() -> str:
     return random.choice([avatar.value for avatar in GenericAvatarPhotosEnum])
 
 
+def refresh_app_data() -> None:
+    st.cache_data.clear()
+    st.rerun()
+
+
 def render_info_card(label: str, value: str) -> None:
     st.markdown(
         f"""
