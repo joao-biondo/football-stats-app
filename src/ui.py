@@ -4,6 +4,15 @@ import plotly.express as px
 import plotly.graph_objects as go
 import random
 from .models import AppState, Player
+from enum import StrEnum
+
+
+class GenericAvatarPhotosEnum(StrEnum):
+    avatar_1 = "https://cdn-icons-png.flaticon.com/512/166/166344.png"
+    avatar_2 = "https://cdn-icons-png.flaticon.com/512/2348/2348811.png"
+    avatar_3 = "https://cdn-icons-png.flaticon.com/512/6409/6409481.png"
+    avatar_4 = "https://cdn-icons-png.flaticon.com/512/2642/2642160.png"
+    avatar_5 = "https://cdn-icons-png.flaticon.com/512/4049/4049083.png"
 
 
 def inject_styles() -> None:
@@ -192,6 +201,10 @@ def random_hex_color():
         return random.randint(0, 255)
 
     return "#%02X%02X%02X" % (f(), f(), f())
+
+
+def random_avatar() -> str:
+    return random.choice([avatar.value for avatar in GenericAvatarPhotosEnum])
 
 
 def render_info_card(label: str, value: str) -> None:

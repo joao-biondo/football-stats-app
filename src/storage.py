@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 from .models import Player, AppState
-from .ui import random_hex_color
+from .ui import random_hex_color, random_avatar
 from typing import NamedTuple
 from enum import StrEnum
 import uuid
@@ -51,11 +51,7 @@ def load_state() -> AppState:
                 assistencias=int(row.get("Assists", 0) or 0),
                 melhor_da_partida=int(row.get("Man of the Match", 0) or 0),
                 votos=int(df2[df2["Player"] == nome]["Votes"].item() or 0),
-                foto_url=str(
-                    row.get(
-                        "Foto", "https://cdn-icons-png.flaticon.com/512/166/166344.png"
-                    )
-                ).strip(),
+                foto_url=str(row.get("Foto", random_avatar())).strip(),
                 cor_tema=random_hex_color(),
             )
             jogadores.append(jogador)
