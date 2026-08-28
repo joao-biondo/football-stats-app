@@ -4,7 +4,6 @@ import time
 from src.storage import load_state, register_vote
 from src.ui import (
     inject_styles,
-    render_info_card,
     refresh_app_data,
     radar_figure,
     goals_bar_chart,
@@ -62,27 +61,24 @@ with tab2:
     jogador = next((p for p in state.jogadores if p.nome == selecionado), None)
 
     if jogador:
-        cols = st.columns(3)
+        cols = st.columns(2)
         with cols[0]:
-            render_info_card("Gols", str(jogador.gols))
+            player_card(jogador)
         with cols[1]:
-            render_info_card("Assistências", str(jogador.assistencias))
-        with cols[2]:
-            render_info_card("Participações em gols", str(jogador.participacoes_gols))
-
-        st.plotly_chart(radar_figure(jogador), width="stretch")
+            st.plotly_chart(radar_figure(jogador), width="stretch")
 
 with tab3:
     col1, col2 = st.columns(2)
     with col1:
         j1_nome = st.selectbox("Jogador 1", nomes, key="j1")
+        j1 = next((p for p in state.jogadores if p.nome == j1_nome), None)
+        player_card(j1)
     with col2:
         j2_nome = st.selectbox(
             "Jogador 2", nomes, index=1 if len(nomes) > 1 else 0, key="j2"
         )
-
-    j1 = next((p for p in state.jogadores if p.nome == j1_nome), None)
-    j2 = next((p for p in state.jogadores if p.nome == j2_nome), None)
+        j2 = next((p for p in state.jogadores if p.nome == j2_nome), None)
+        player_card(j2)
 
     if j1 and j2:
         st.plotly_chart(radar_figure(j1, j2), width="stretch")

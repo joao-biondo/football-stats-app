@@ -212,18 +212,6 @@ def refresh_app_data() -> None:
     st.rerun()
 
 
-def render_info_card(label: str, value: str) -> None:
-    st.markdown(
-        f"""
-        <div class="stat-card">
-            <div class="label">{label}</div>
-            <div class="value">{value}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
 def radar_figure(player_a: Player, player_b: Player = None) -> go.Figure:
     labels = ["Gols", "Assistências", "Participações"]
 
