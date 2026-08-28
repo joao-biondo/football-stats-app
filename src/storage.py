@@ -2,8 +2,18 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 from .models import Player, AppState
 from typing import NamedTuple
+from enum import StrEnum
 import uuid
 import requests
+
+
+class WorksheetGID(StrEnum):
+    player_stats = (
+        st.secrets.get("connections").get("worksheets_gid").get("player_stats")
+    )
+    player_votes = (
+        st.secrets.get("connections").get("worksheets_gid").get("player_votes")
+    )
 
 
 @st.cache_resource
@@ -20,8 +30,10 @@ def _get_gsheets_connection() -> GSheetsConnection:
 def load_state() -> AppState:
     try:
         conn = _get_gsheets_connection()
-        df = conn.read()
+        df = conn.read(worksheet=WorksheetGID.player_stats)
         df = df.replace(float("NaN"), 0)
+        df2 = conn.read(worksheet=WorksheetGID.player_votes)
+        df2 = df2.replace(float("NaN"), 0)
 
         if df is None or df.empty:
             return AppState()
@@ -37,6 +49,7 @@ def load_state() -> AppState:
                 gols=int(row.get("Goals", 0) or 0),
                 assistencias=int(row.get("Assists", 0) or 0),
                 melhor_da_partida=int(row.get("Man of the Match", 0) or 0),
+                votos=int(df2[df2["Player"] == nome]["Votes"].item() or 0),
                 foto_url=str(
                     row.get(
                         "Foto", "https://cdn-icons-png.flaticon.com/512/166/166344.png"

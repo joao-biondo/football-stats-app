@@ -88,11 +88,13 @@ with tab3:
         st.plotly_chart(goals_vs_assists_per_player(j1, j2), width="stretch")
 
 with tab4:
-    st.subheader("Melhor da semana")
-
     nomes = [player.nome for player in state.jogadores]
-    _, col, _ = st.columns(3)
-    with col:
+    (
+        col1,
+        col2,
+    ) = st.columns(2)
+    with col1:
+        st.subheader("Melhor da semana")
         jogador = st.selectbox("Craque:", nomes)
         player_obj = next((p for p in state.jogadores if p.nome == jogador), None)
         if player_obj:
@@ -104,3 +106,8 @@ with tab4:
                 st.success(message)
             else:
                 st.warning(message)
+    with col2:
+        st.subheader("Ranking de Votos")
+        votos = df_geral.sort_values(by="Votos", ascending=False)
+        votos = votos.loc[:, ["Jogador", "Votos"]]
+        st.table(votos, hide_index=True, height=425)
