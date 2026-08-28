@@ -366,6 +366,10 @@ def player_card(player: Player):
                 <span class="stat-value">⭐ {player.melhor_da_partida}</span>
                 <span class="stat-label">CRAQUE</span>
             </div>
+            <div class="stat-box">
+                <span class="stat-value">{player.votos}</span>
+                <span class="stat-label">VOTOS</span>
+            </div>
         </div>
     </div>
     """
