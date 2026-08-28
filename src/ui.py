@@ -120,6 +120,67 @@ def inject_styles() -> None:
             margin-top: 2px;
             letter-spacing: 0.5px;
         }
+
+        div[data-testid="stButton"] button {
+            padding: 15px
+        }
+
+        /* Leaderboard st.table Container Styling */
+        div[data-testid="stTable"] {
+            background: linear-gradient(135deg, rgba(10, 48, 34, 0.85) 0%, rgba(4, 30, 21, 0.95) 100%);
+            border: 2px solid #f7c948;
+            border-radius: 16px;
+            padding: 0.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(247, 201, 72, 0.1);
+            overflow: hidden;
+        }
+
+        div[data-testid="stTable"] table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #ffffff;
+        }
+
+        /* Header Cells */
+        div[data-testid="stTable"] th {
+            background-color: rgba(6, 35, 25, 0.8) !important;
+            color: #f7c948 !important;
+            font-size: 0.8rem !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            padding: 12px 14px !important;
+            border-bottom: 2px solid rgba(247, 201, 72, 0.3) !important;
+            text-align: center !important;
+        }
+
+        /* Body Cells */
+        div[data-testid="stTable"] td {
+            padding: 10px 14px !important;
+            font-size: 0.9rem !important;
+            color: #f0fdf4 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+            text-align: center !important;
+        }
+
+        /* Row Hover Effect */
+        div[data-testid="stTable"] tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        div[data-testid="stTable"] tbody tr:hover {
+            background-color: rgba(247, 201, 72, 0.08) !important;
+        }
+
+        div[data-testid="stTable"] tbody tr:last-child td {
+            border-bottom: none !important;
+        }
+
+        /* Highlight Leader (Row 1) */
+        div[data-testid="stTable"] tbody tr:first-child td {
+            font-weight: 800;
+            color: #f7c948 !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
