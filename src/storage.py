@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 from .models import Player, AppState
+from .ui import random_hex_color
 from typing import NamedTuple
 from enum import StrEnum
 import uuid
@@ -55,6 +56,7 @@ def load_state() -> AppState:
                         "Foto", "https://cdn-icons-png.flaticon.com/512/166/166344.png"
                     )
                 ).strip(),
+                cor_tema=random_hex_color(),
             )
             jogadores.append(jogador)
 

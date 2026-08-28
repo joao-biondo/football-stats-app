@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
+import random
 from .models import AppState, Player
 
 
@@ -125,6 +126,13 @@ def inject_styles() -> None:
     )
 
 
+def random_hex_color():
+    def f():
+        return random.randint(0, 255)
+
+    return "#%02X%02X%02X" % (f(), f(), f())
+
+
 def render_info_card(label: str, value: str) -> None:
     st.markdown(
         f"""
@@ -162,7 +170,7 @@ def radar_figure(player_a: Player, player_b: Player = None) -> go.Figure:
                 theta=labels + [labels[0]],
                 fill="toself",
                 name=player_b.nome,
-                line=dict(color="#f7c948", width=3),
+                line=dict(color=player_b.cor_tema, width=3),
                 hovertemplate="<b>%{theta}</b>: %{r}<extra></extra>",
             )
         )
@@ -207,12 +215,15 @@ def goals_vs_assists_scatter(state: AppState) -> go.Figure:
     if df.empty:
         return go.Figure()
 
+    color_map = {p.nome: p.cor_tema for p in state.jogadores}
+
     fig = px.scatter(
         df,
         x="Assistências",
         y="Gols",
         size="Participações",
         color="Jogador",
+        color_discrete_map=color_map,
         hover_name="Jogador",
         size_max=40,
     )
