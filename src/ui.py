@@ -36,7 +36,7 @@ def inject_styles() -> None:
             border: 2px solid #f7c948;
             border-radius: 20px;
             padding: 1.2rem;
-            max-width: 340px;
+            max-width: 500px;
             margin: 0.5rem auto;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(247, 201, 72, 0.15);
             transition: transform 0.2s ease;
