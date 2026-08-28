@@ -196,7 +196,7 @@ def inject_styles() -> None:
     )
 
 
-def random_hex_color():
+def random_hex_color() -> str:
     def f():
         return random.randint(0, 255)
 
