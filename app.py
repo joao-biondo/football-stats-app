@@ -1,14 +1,16 @@
 import streamlit as st
 import pandas as pd
-from src.storage import load_state
+import time
+from src.storage import load_state, register_vote
 from src.ui import (
     inject_styles,
-    render_info_card,
+    refresh_app_data,
     radar_figure,
     goals_bar_chart,
     goals_vs_assists_scatter,
     goals_vs_assists_per_player,
     most_goals_and_assists,
+    player_card,
 )
 
 st.set_page_config(
@@ -25,15 +27,16 @@ if not state.jogadores:
     st.warning("Nenhum dado encontrado. Verifique a conexão com a planilha.")
     st.stop()
 
-tab1, tab2, tab3 = st.tabs(["🏠 Geral", "👤 Perfil do Jogador", "⚔️ Comparação"])
+tab1, tab2, tab3, tab4 = st.tabs(
+    ["🏠 Geral", "👤 Perfil do Jogador", "⚔️ Comparação", "⭐ Vote no melhor da semana"]
+)
 
 with tab1:
     st.subheader("Tabela Geral")
     df_geral = pd.DataFrame([p.to_dict() for p in state.jogadores])
-    st.dataframe(df_geral, width="stretch", hide_index=True)
+    st.dataframe(df_geral.iloc[:, :-1], width="stretch", hide_index=True)
     if st.button("🔄 Atualizar Dados"):
-        st.cache_data.clear()
-        st.rerun()
+        refresh_app_data()
     metrics = most_goals_and_assists(state)
     for idx, col in enumerate(st.columns(3)):
         with col:
@@ -58,28 +61,52 @@ with tab2:
     jogador = next((p for p in state.jogadores if p.nome == selecionado), None)
 
     if jogador:
-        cols = st.columns(3)
+        cols = st.columns(2)
         with cols[0]:
-            render_info_card("Gols", str(jogador.gols))
+            player_card(jogador)
         with cols[1]:
-            render_info_card("Assistências", str(jogador.assistencias))
-        with cols[2]:
-            render_info_card("Participações em gols", str(jogador.participacoes_gols))
-
-        st.plotly_chart(radar_figure(jogador), width="stretch")
+            st.plotly_chart(radar_figure(jogador), width="stretch")
 
 with tab3:
     col1, col2 = st.columns(2)
     with col1:
         j1_nome = st.selectbox("Jogador 1", nomes, key="j1")
+        j1 = next((p for p in state.jogadores if p.nome == j1_nome), None)
+        player_card(j1)
     with col2:
         j2_nome = st.selectbox(
             "Jogador 2", nomes, index=1 if len(nomes) > 1 else 0, key="j2"
         )
-
-    j1 = next((p for p in state.jogadores if p.nome == j1_nome), None)
-    j2 = next((p for p in state.jogadores if p.nome == j2_nome), None)
+        j2 = next((p for p in state.jogadores if p.nome == j2_nome), None)
+        player_card(j2)
 
     if j1 and j2:
         st.plotly_chart(radar_figure(j1, j2), width="stretch")
         st.plotly_chart(goals_vs_assists_per_player(j1, j2), width="stretch")
+
+with tab4:
+    nomes = [player.nome for player in state.jogadores]
+    (
+        col1,
+        col2,
+    ) = st.columns(2)
+    with col1:
+        st.subheader("Melhor da semana")
+        jogador = st.selectbox("Craque:", nomes)
+        player_obj = next((p for p in state.jogadores if p.nome == jogador), None)
+        if player_obj:
+            player_card(player_obj)
+        if st.button("Votar", width="stretch", type="primary"):
+            res = register_vote(jogador)
+            message = res.message
+            if res.success:
+                st.success(message)
+                time.sleep(2)
+                refresh_app_data()
+            else:
+                st.warning(message)
+    with col2:
+        st.subheader("Ranking de Votos")
+        votos = df_geral.sort_values(by="Votos", ascending=False)
+        votos = votos.loc[:, ["Jogador", "Votos"]]
+        st.table(votos, hide_index=True, height=425)

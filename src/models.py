@@ -7,6 +7,8 @@ class Player:
     nome: str
     gols: int = 0
     assistencias: int = 0
+    melhor_da_partida: int = 0
+    votos: int = 0
     foto_url: str = ""
     cor_tema: str = "#006437"  # Verde clássico como padrão
 
@@ -20,6 +22,8 @@ class Player:
             "Gols": self.gols,
             "Assistências": self.assistencias,
             "Participações": self.participacoes_gols,
+            "Melhor da Partida": self.melhor_da_partida,
+            "Votos": self.votos,
         }
 
 
